@@ -1,0 +1,113 @@
+'use client'
+
+import { AlertCircle } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { toast } from 'sonner'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Button } from '@/components/ui/button'
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle
+} from '@/components/ui/card'
+import { Label } from '@/components/ui/label'
+import { PasswordInput } from '@/components/ui/password-input'
+import { authClient } from '@/lib/auth-client'
+
+import { useSearchParams } from 'next/navigation'
+
+export default function ResetPassword() {
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [error, setError] = useState('')
+    const router = useRouter()
+
+    const searchParams = useSearchParams()
+
+    const errorParam = searchParams.get('error')
+
+    if (errorParam && !error) {
+        setError('Token inválido o expirado.')
+    }
+
+    async function handleSubmit(e: React.FormEvent) {
+        e.preventDefault()
+        setIsSubmitting(true)
+        setError('')
+        const res = await authClient.resetPassword({
+            newPassword: password,
+            token: new URLSearchParams(window.location.search).get('token')!
+        })
+        if (res.error) {
+            toast.error(res.error.message)
+        }
+        setIsSubmitting(false)
+        router.push('/signin')
+    }
+    return (
+        <div className='flex flex-col items-center justify-center min-h-[calc(100vh-10rem)]'>
+            <Card className='w-[350px]'>
+                <CardHeader>
+                    <CardTitle>Restablece tu contraseña</CardTitle>
+                    <CardDescription>
+                        Enter new password and confirm it to reset your password
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <form onSubmit={handleSubmit}>
+                        <div className='grid w-full items-center gap-2'>
+                            <div className='flex flex-col space-y-1.5'>
+                                <Label htmlFor='email'>Nueva contaseña</Label>
+                                <PasswordInput
+                                    id='password'
+                                    value={password}
+                                    onChange={(
+                                        e: React.ChangeEvent<HTMLInputElement>
+                                    ) => setPassword(e.target.value)}
+                                    autoComplete='password'
+                                    placeholder='Password'
+                                    disabled={errorParam !== null}
+                                />
+                            </div>
+                            <div className='flex flex-col space-y-1.5'>
+                                <Label htmlFor='email'>
+                                    Confirmar contraseña
+                                </Label>
+                                <PasswordInput
+                                    id='passwordConfirm'
+                                    value={confirmPassword}
+                                    onChange={(
+                                        e: React.ChangeEvent<HTMLInputElement>
+                                    ) => setConfirmPassword(e.target.value)}
+                                    autoComplete='password'
+                                    placeholder='Password'
+                                    disabled={errorParam !== null}
+                                />
+                            </div>
+                        </div>
+                        {error && (
+                            <Alert variant='destructive' className='mt-4'>
+                                <AlertCircle className='h-4 w-4' />
+                                <AlertDescription>{error}</AlertDescription>
+                            </Alert>
+                        )}
+                        {errorParam === null && (
+                            <Button
+                                className='w-full mt-4'
+                                type='submit'
+                                disabled={isSubmitting}>
+                                {isSubmitting
+                                    ? 'Restableciendo...'
+                                    : 'Restablecer contraseña'}
+                            </Button>
+                        )}
+                    </form>
+                </CardContent>
+            </Card>
+        </div>
+    )
+}
