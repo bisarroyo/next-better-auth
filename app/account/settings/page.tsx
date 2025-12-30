@@ -26,8 +26,8 @@ export default async function DashboardPage() {
 
     console.log(activeSessions)
     return (
-        <div className='w-full'>
-            <div className='flex gap-4 flex-col'>
+        <div className='w-full flex items-center justify-center'>
+            <div className='flex gap-4 flex-col max-w-7xl w-full mx-auto mt-4'>
                 <UserCard
                     session={JSON.parse(JSON.stringify(session))}
                     activeSessions={JSON.parse(JSON.stringify(activeSessions))}

@@ -120,11 +120,10 @@ export default function UserCard(props: {
 
                 {session?.user.emailVerified ? null : (
                     <Alert>
-                        <AlertTitle>Verify Your Email Address</AlertTitle>
+                        <AlertTitle>Verifica tu correo electrónico</AlertTitle>
                         <AlertDescription className='text-muted-foreground'>
-                            Please verify your email address. Check your inbox
-                            for the verification email. If you havent received
-                            the email, click the button below to resend.
+                            Por favor verifica tu correo electrónico para
+                            asegurar la seguridad de tu cuenta.
                             <Button
                                 size='sm'
                                 variant='secondary'
@@ -152,7 +151,7 @@ export default function UserCard(props: {
                                             },
                                             onSuccess() {
                                                 toast.success(
-                                                    'Verification email sent successfully'
+                                                    'Correo de verificación enviado con éxito'
                                                 )
                                                 setEmailVerificationPending(
                                                     false
@@ -167,7 +166,7 @@ export default function UserCard(props: {
                                         className='animate-spin'
                                     />
                                 ) : (
-                                    'Resend Verification Email'
+                                    'Enviar correo de verificación'
                                 )}
                             </Button>
                         </AlertDescription>
@@ -175,7 +174,7 @@ export default function UserCard(props: {
                 )}
 
                 <div className='border-l-2 px-2 w-max gap-1 flex flex-col'>
-                    <p className='text-xs font-medium '>Active Sessions</p>
+                    <p className='text-xs font-medium '>Sesiones activas</p>
                     {activeSessions
                         .filter((session) => session.userAgent)
                         .map((session) => {
@@ -216,7 +215,7 @@ export default function UserCard(props: {
                                                     )
                                                 } else {
                                                     toast.success(
-                                                        'Session terminated successfully'
+                                                        'Sesión terminada con éxito'
                                                     )
                                                     removeActiveSession(
                                                         session.id
@@ -236,9 +235,9 @@ export default function UserCard(props: {
                                                 />
                                             ) : session.id ===
                                               props.session?.session.id ? (
-                                                'Sign Out'
+                                                'Cerrar sesión actual'
                                             ) : (
-                                                'Terminate'
+                                                'Terminar'
                                             )}
                                         </button>
                                     </div>
@@ -248,14 +247,14 @@ export default function UserCard(props: {
                 </div>
                 <div className='border-y py-4 flex items-center flex-wrap justify-between gap-2'>
                     <div className='flex flex-col gap-2'>
-                        <p className='text-sm'>Passkeys</p>
+                        <p className='text-sm'>Llaves de acceso</p>
                         <div className='flex gap-2 flex-wrap'>
                             <AddPasskey />
                             <ListPasskeys />
                         </div>
                     </div>
                     <div className='flex flex-col gap-2'>
-                        <p className='text-sm'>Two Factor</p>
+                        <p className='text-sm'>Autenticación de 2 factores</p>
                         <div className='flex gap-2'>
                             {!!session?.user.twoFactorEnabled && (
                                 <Dialog>
@@ -265,18 +264,18 @@ export default function UserCard(props: {
                                             className='gap-2'>
                                             <QrCode size={16} />
                                             <span className='md:text-sm text-xs'>
-                                                Scan QR Code
+                                                Escanear código QR
                                             </span>
                                         </Button>
                                     </DialogTrigger>
                                     <DialogContent className='sm:max-w-[425px] w-11/12'>
                                         <DialogHeader>
                                             <DialogTitle>
-                                                Scan QR Code
+                                                Escanear código QR
                                             </DialogTitle>
                                             <DialogDescription>
-                                                Scan the QR code with your TOTP
-                                                app
+                                                Escaneaa código QR con tu
+                                                aplicación TOTP
                                             </DialogDescription>
                                         </DialogHeader>
 
@@ -291,7 +290,8 @@ export default function UserCard(props: {
                                                 </div>
                                                 <div className='flex gap-2 items-center justify-center'>
                                                     <p className='text-sm text-muted-foreground'>
-                                                        Copy URI to clipboard
+                                                        Copia este URI de
+                                                        verificación:
                                                     </p>
                                                     <CopyButton
                                                         textToCopy={
@@ -311,7 +311,7 @@ export default function UserCard(props: {
                                                             e.target.value
                                                         )
                                                     }
-                                                    placeholder='Enter Password'
+                                                    placeholder='Ingresa tu contraseña'
                                                 />
                                                 <Button
                                                     onClick={async () => {
@@ -320,7 +320,7 @@ export default function UserCard(props: {
                                                             8
                                                         ) {
                                                             toast.error(
-                                                                'Password must be at least 8 characters'
+                                                                'La contraseña debe tener al menos 8 caracteres'
                                                             )
                                                             return
                                                         }
@@ -345,7 +345,7 @@ export default function UserCard(props: {
                                                         )
                                                         setTwoFaPassword('')
                                                     }}>
-                                                    Show QR Code
+                                                    Mostrar código QR
                                                 </Button>
                                             </div>
                                         )}
@@ -370,8 +370,8 @@ export default function UserCard(props: {
                                         )}
                                         <span className='md:text-sm text-xs'>
                                             {session?.user.twoFactorEnabled
-                                                ? 'Disable 2FA'
-                                                : 'Enable 2FA'}
+                                                ? 'Desactivar 2FA'
+                                                : 'Activar 2FA'}
                                         </span>
                                     </Button>
                                 </DialogTrigger>
@@ -379,13 +379,13 @@ export default function UserCard(props: {
                                     <DialogHeader>
                                         <DialogTitle>
                                             {session?.user.twoFactorEnabled
-                                                ? 'Disable 2FA'
-                                                : 'Enable 2FA'}
+                                                ? 'Desactivar 2FA'
+                                                : 'Activar 2FA'}
                                         </DialogTitle>
                                         <DialogDescription>
                                             {session?.user.twoFactorEnabled
-                                                ? 'Disable the second factor authentication from your account'
-                                                : 'Enable 2FA to secure your account'}
+                                                ? 'Desactiva 2FA para tu cuenta'
+                                                : 'Activa 2FA para tu cuenta'}
                                         </DialogDescription>
                                     </DialogHeader>
 
@@ -397,8 +397,7 @@ export default function UserCard(props: {
                                                 />
                                             </div>
                                             <Label htmlFor='password'>
-                                                Scan the QR code with your TOTP
-                                                app
+                                                Escanear código OTP
                                             </Label>
                                             <Input
                                                 value={twoFaPassword}
@@ -409,17 +408,17 @@ export default function UserCard(props: {
                                                         e.target.value
                                                     )
                                                 }
-                                                placeholder='Enter OTP'
+                                                placeholder='Ingresa el código OTP'
                                             />
                                         </div>
                                     ) : (
                                         <div className='flex flex-col gap-2'>
                                             <Label htmlFor='password'>
-                                                Password
+                                                Contraseña
                                             </Label>
                                             <PasswordInput
                                                 id='password'
-                                                placeholder='Password'
+                                                placeholder='Contraseña'
                                                 value={twoFaPassword}
                                                 onChange={(
                                                     e: React.ChangeEvent<HTMLInputElement>
@@ -440,7 +439,7 @@ export default function UserCard(props: {
                                                     !twoFactorVerifyURI
                                                 ) {
                                                     toast.error(
-                                                        'Password must be at least 8 characters'
+                                                        'La contraseña debe tener al menos 8 caracteres'
                                                     )
                                                     return
                                                 }
@@ -468,7 +467,7 @@ export default function UserCard(props: {
                                                                     },
                                                                     onSuccess() {
                                                                         toast(
-                                                                            '2FA disabled successfully'
+                                                                            '2FA desactivado con éxito'
                                                                         )
                                                                         setTwoFactorDialog(
                                                                             false
@@ -502,7 +501,7 @@ export default function UserCard(props: {
                                                                     },
                                                                     onSuccess() {
                                                                         toast(
-                                                                            '2FA enabled successfully'
+                                                                            '2FA activado con éxito'
                                                                         )
                                                                         setTwoFactorVerifyURI(
                                                                             ''
@@ -566,9 +565,9 @@ export default function UserCard(props: {
                                                 />
                                             ) : session?.user
                                                   .twoFactorEnabled ? (
-                                                'Disable 2FA'
+                                                'Descativar 2FA'
                                             ) : (
-                                                'Enable 2FA'
+                                                'Activar 2FA'
                                             )}
                                         </Button>
                                     </DialogFooter>
@@ -778,16 +777,18 @@ function EditUserDialog() {
             <DialogTrigger asChild>
                 <Button size='sm' className='gap-2' variant='secondary'>
                     <Edit size={13} />
-                    Edit User
+                    Actualizar Información
                 </Button>
             </DialogTrigger>
             <DialogContent className='sm:max-w-[425px] w-11/12'>
                 <DialogHeader>
-                    <DialogTitle>Edit User</DialogTitle>
-                    <DialogDescription>Edit user information</DialogDescription>
+                    <DialogTitle>Editar información personal</DialogTitle>
+                    <DialogDescription>
+                        Actualiza tu información personal
+                    </DialogDescription>
                 </DialogHeader>
                 <div className='grid gap-2'>
-                    <Label htmlFor='name'>Full Name</Label>
+                    <Label htmlFor='name'>Nombre completo</Label>
                     <Input
                         id='name'
                         type='name'
@@ -798,7 +799,7 @@ function EditUserDialog() {
                         }}
                     />
                     <div className='grid gap-2'>
-                        <Label htmlFor='image'>Profile Image</Label>
+                        <Label htmlFor='image'>Imagen de perfil</Label>
                         <div className='flex items-end gap-4'>
                             {imagePreview && (
                                 <div className='relative w-16 h-16 rounded-sm overflow-hidden'>
@@ -866,7 +867,7 @@ function EditUserDialog() {
                         {isLoading ? (
                             <Loader2 size={15} className='animate-spin' />
                         ) : (
-                            'Update'
+                            'Actualizar'
                         )}
                     </Button>
                 </DialogFooter>
@@ -882,7 +883,7 @@ function AddPasskey() {
 
     const handleAddPasskey = async () => {
         if (!passkeyName) {
-            toast.error('Passkey name is required')
+            toast.error('Nombre de la llave de acceso es obligatorio')
             return
         }
         setIsLoading(true)
@@ -894,7 +895,7 @@ function AddPasskey() {
         } else {
             setIsOpen(false)
             toast.success(
-                'Passkey added successfully. You can now use it to login.'
+                'Llave de acceso agregada con éxito. Ahora puedes usarla para iniciar sesión.'
             )
         }
         setIsLoading(false)
@@ -904,19 +905,21 @@ function AddPasskey() {
             <DialogTrigger asChild>
                 <Button variant='outline' className='gap-2 text-xs md:text-sm'>
                     <Plus size={15} />
-                    Add New Passkey
+                    Agregar Llave de Acceso
                 </Button>
             </DialogTrigger>
             <DialogContent className='sm:max-w-[425px] w-11/12'>
                 <DialogHeader>
-                    <DialogTitle>Add New Passkey</DialogTitle>
+                    <DialogTitle>Agregar nueva llave de acceso</DialogTitle>
                     <DialogDescription>
-                        Create a new passkey to securely access your account
-                        without a password.
+                        Crea una nueva llave de acceso para tu cuenta para
+                        iniciar sesión de forma segura, sin contraseña.
                     </DialogDescription>
                 </DialogHeader>
                 <div className='grid gap-2'>
-                    <Label htmlFor='passkey-name'>Passkey Name</Label>
+                    <Label htmlFor='passkey-name'>
+                        Nombre de la llave de acceso
+                    </Label>
                     <Input
                         id='passkey-name'
                         value={passkeyName}
@@ -936,7 +939,7 @@ function AddPasskey() {
                         ) : (
                             <>
                                 <Fingerprint className='mr-2 h-4 w-4' />
-                                Create Passkey
+                                Crear Llave de Acceso
                             </>
                         )}
                     </Button>
@@ -953,7 +956,7 @@ function ListPasskeys() {
 
     const handleAddPasskey = async () => {
         if (!passkeyName) {
-            toast.error('Passkey name is required')
+            toast.error('Nombre de la llave de acceso es obligatorio')
             return
         }
         setIsLoading(true)
@@ -965,7 +968,7 @@ function ListPasskeys() {
             toast.error(res?.error.message)
         } else {
             toast.success(
-                'Passkey added successfully. You can now use it to login.'
+                'Llave de acceso agregada con éxito. Ahora puedes usarla para iniciar sesión.'
             )
         }
     }
@@ -977,20 +980,23 @@ function ListPasskeys() {
                 <Button variant='outline' className='text-xs md:text-sm'>
                     <Fingerprint className='mr-2 h-4 w-4' />
                     <span>
-                        Passkeys {data?.length ? `[${data?.length}]` : ''}
+                        Llaves de acceso{' '}
+                        {data?.length ? `[${data?.length}]` : ''}
                     </span>
                 </Button>
             </DialogTrigger>
             <DialogContent className='sm:max-w-[425px] w-11/12'>
                 <DialogHeader>
-                    <DialogTitle>Passkeys</DialogTitle>
-                    <DialogDescription>List of passkeys</DialogDescription>
+                    <DialogTitle>Llaves de acceso</DialogTitle>
+                    <DialogDescription>
+                        Lista de llaves de acceso
+                    </DialogDescription>
                 </DialogHeader>
                 {data?.length ? (
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Name</TableHead>
+                                <TableHead>Nombre</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -1062,14 +1068,14 @@ function ListPasskeys() {
                     </Table>
                 ) : (
                     <p className='text-sm text-muted-foreground'>
-                        No passkeys found
+                        No tienes llaves de acceso agregadas.
                     </p>
                 )}
                 {!data?.length && (
                     <div className='flex flex-col gap-2'>
                         <div className='flex flex-col gap-2'>
                             <Label htmlFor='passkey-name' className='text-sm'>
-                                New Passkey
+                                Nueva llave de acceso
                             </Label>
                             <Input
                                 id='passkey-name'
@@ -1089,14 +1095,14 @@ function ListPasskeys() {
                             ) : (
                                 <>
                                     <Fingerprint className='mr-2 h-4 w-4' />
-                                    Create Passkey
+                                    Crear Llave de Acceso
                                 </>
                             )}
                         </Button>
                     </div>
                 )}
                 <DialogFooter>
-                    <Button onClick={() => setIsOpen(false)}>Close</Button>
+                    <Button onClick={() => setIsOpen(false)}>Cerrar</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
