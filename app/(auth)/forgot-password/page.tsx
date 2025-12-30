@@ -78,9 +78,9 @@ export default function Component() {
         <main className='flex flex-col items-center justify-center min-h-[calc(100vh-10rem)]'>
             {/* Radial gradient for the container to give a faded look */}
             <div className='absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white mask-[radial-gradient(ellipse_at_center,transparent_20%,black)]'></div>
-            <Card className='w-[350px]'>
+            <Card className='min-w-sm'>
                 <CardHeader>
-                    <CardTitle>Olvidaste tu cntraseña</CardTitle>
+                    <CardTitle>Olvidaste tu contraseña</CardTitle>
                     <CardDescription>
                         Ingresa tu correo electrónico para recibir un enlace de
                         de contraseña.
