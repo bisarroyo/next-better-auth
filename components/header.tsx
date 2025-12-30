@@ -43,45 +43,57 @@ export function Header() {
                     <Link href={'/'}>ACME</Link>
                 </div>
                 <div className='flex justify-end gap-2'>
-                    <DropdownMenu>
-                        {isPending ? (
-                            <div className='h-8 w-8 rounded-full bg-muted animate-pulse' />
-                        ) : (
-                            <DropdownMenuTrigger
-                                asChild
-                                className='cursor-pointer'>
-                                <Avatar>
-                                    <AvatarImage
-                                        src={
-                                            session?.user.image ||
-                                            '/avatar-placeholder.png'
-                                        }
-                                        alt='@shadcn'
-                                    />
-                                    <AvatarFallback>CN</AvatarFallback>
-                                </Avatar>
-                            </DropdownMenuTrigger>
-                        )}
-                        <DropdownMenuContent className='w-40' align='start'>
-                            <DropdownMenuLabel>
-                                {session?.user.name}
-                            </DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuGroup>
-                                <DropdownMenuItem>Perfil</DropdownMenuItem>
-                                <DropdownMenuItem>Ajustes</DropdownMenuItem>
-                            </DropdownMenuGroup>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                                onClick={signOut}
-                                variant='destructive'>
-                                Cerrar sesión
-                                <DropdownMenuShortcut>
-                                    <LogOut className='text-[#ff5470]' />
-                                </DropdownMenuShortcut>
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    {session && (
+                        <DropdownMenu>
+                            {isPending ? (
+                                <div className='h-8 w-8 rounded-full bg-muted animate-pulse' />
+                            ) : (
+                                <DropdownMenuTrigger
+                                    asChild
+                                    className='cursor-pointer'>
+                                    <Avatar>
+                                        <AvatarImage
+                                            src={
+                                                session?.user.image ||
+                                                '/avatar-placeholder.png'
+                                            }
+                                            alt='@shadcn'
+                                        />
+                                        <AvatarFallback>
+                                            {session?.user?.name
+                                                ?.slice(0, 2)
+                                                .toUpperCase()}
+                                        </AvatarFallback>
+                                    </Avatar>
+                                </DropdownMenuTrigger>
+                            )}
+                            <DropdownMenuContent className='w-40' align='start'>
+                                <DropdownMenuLabel>
+                                    {session?.user.name.split(' ')[0]}
+                                </DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuGroup>
+                                    <DropdownMenuItem>
+                                        <Link href={'/account'}>Perfil</Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                        <Link href={'/account/settings'}>
+                                            Ajustes
+                                        </Link>
+                                    </DropdownMenuItem>
+                                </DropdownMenuGroup>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                    onClick={signOut}
+                                    variant='destructive'>
+                                    Cerrar sesión
+                                    <DropdownMenuShortcut>
+                                        <LogOut className='text-[#ff5470]' />
+                                    </DropdownMenuShortcut>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    )}
                     <div className='flex items-center gap-3'>
                         <ModeToggle />
                     </div>

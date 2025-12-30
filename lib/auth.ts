@@ -19,7 +19,6 @@ import {
     openAPI,
     multiSession,
     oneTap,
-    customSession,
     twoFactor
 } from 'better-auth/plugins'
 
@@ -79,16 +78,7 @@ export const auth = betterAuth({
         openAPI(),
         multiSession(),
         nextCookies(),
-        oneTap(),
-        customSession(async (session) => {
-            return {
-                ...session,
-                user: {
-                    ...session.user,
-                    dd: 'test'
-                }
-            }
-        })
+        oneTap()
     ], //pendiente
 
     emailAndPassword: {

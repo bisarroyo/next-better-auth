@@ -2,7 +2,7 @@
 
 import { authClient } from '@/lib/auth-client'
 import { signUpAction } from '@/app/actions/auth'
-import { useActionState } from 'react'
+import { useActionState, useEffect } from 'react'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -20,8 +20,14 @@ import {
     CardHeader,
     CardTitle
 } from '@/components/ui/card'
+import { useRouter } from 'next/router'
+import { getCallbackURL } from '@/lib/shared'
+import { useSearchParams } from 'next/navigation'
 
 export default function SignupPage() {
+    const router = useRouter()
+    const params = useSearchParams()
+
     const [error, setError] = useState<string | null>(null)
     const [loading, setLoading] = useState(false)
 
@@ -60,6 +66,12 @@ export default function SignupPage() {
             setLoading(false)
         }
     }
+    useEffect(() => {
+        // console.log(state)
+        if (state?.success) {
+            router.push('/')
+        }
+    }, [state, router, params])
 
     return (
         <section className='w-full min-h-[calc(100vh-10rem)] flex items-center justify-center relative'>

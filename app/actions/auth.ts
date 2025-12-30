@@ -1,7 +1,6 @@
 'use server'
 
 import { headers } from 'next/headers'
-import { redirect } from 'next/navigation'
 import { auth } from '@/lib/auth'
 import { z } from 'zod'
 
@@ -45,6 +44,7 @@ export async function signUpAction(prevState: unknown, formData: FormData) {
             },
             headers: await headers()
         })
+        return { success: true, error: null }
     } catch (err) {
         console.error('Better Auth error:', err)
 
@@ -67,7 +67,6 @@ export async function signUpAction(prevState: unknown, formData: FormData) {
             error: 'Error inesperado. Intenta de nuevo.'
         }
     }
-    redirect('/')
 }
 
 const signInSchema = z.object({
@@ -95,6 +94,7 @@ export async function signInAction(prevState: unknown, formData: FormData) {
             },
             headers: await headers()
         })
+        return { success: true, error: null }
     } catch (err) {
         console.error('Better Auth error:', err)
 
@@ -117,7 +117,6 @@ export async function signInAction(prevState: unknown, formData: FormData) {
             error: 'Error inesperado. Intenta de nuevo.'
         }
     }
-    redirect('/')
 }
 
 export async function signOutAction() {
@@ -125,7 +124,6 @@ export async function signOutAction() {
         await auth.api.signOut({
             headers: await headers()
         })
-        redirect('/')
     } catch (error) {
         console.log(error)
         return { error: 'Error al cerrar sesión' }

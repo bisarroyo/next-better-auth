@@ -81,6 +81,13 @@ export default function SigninPage() {
             setLoading(false)
         }
     }
+    useEffect(() => {
+        // console.log(state)
+        if (state?.success) {
+            router.refresh()
+            router.push(getCallbackURL(params))
+        }
+    }, [state, router, params])
 
     return (
         <section className='w-full min-h-[calc(100vh-10rem)] flex items-center justify-center relative'>
@@ -92,7 +99,7 @@ export default function SigninPage() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    {state.error && (
+                    {state?.error && (
                         <div className='mb-4 p-3 bg-red-100 text-red-600 rounded-md text-sm'>
                             {state.error}
                         </div>
