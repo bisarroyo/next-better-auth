@@ -8,19 +8,12 @@ import {
     twoFactorClient
 } from 'better-auth/client/plugins'
 
-import { ac, admin, user, agent } from '@/lib/permission'
+// import { ac, admin, user, agent } from '@/lib/permission'
 
 export const authClient = createAuthClient({
     plugins: [
         organizationClient(),
-        adminClient({
-            ac,
-            roles: {
-                admin,
-                user,
-                agent
-            }
-        }),
+        adminClient(),
         oneTapClient({
             clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
             promptOptions: {

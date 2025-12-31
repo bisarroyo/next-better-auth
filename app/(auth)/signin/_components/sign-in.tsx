@@ -34,7 +34,7 @@ export default function SignIn() {
                 <div className='grid gap-4'>
                     <SignInForm
                         onSuccess={() => router.push(getCallbackURL(params))}
-                        callbackURL='/dashboard'
+                        callbackURL='/'
                     />
 
                     {/* OAuth Buttons */}
@@ -49,7 +49,7 @@ export default function SignIn() {
                             onClick={async () => {
                                 await authClient.signIn.social({
                                     provider: 'google',
-                                    callbackURL: '/dashboard'
+                                    callbackURL: '/'
                                 })
                             }}>
                             <svg

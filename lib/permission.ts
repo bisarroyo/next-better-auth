@@ -1,21 +1,40 @@
 import { createAccessControl } from 'better-auth/plugins/access'
+import { defaultStatements, adminAc } from 'better-auth/plugins/admin/access'
 
 export const statement = {
-    leads: ['create', 'update', 'delete', 'view'], // <-- Permissions available for created roles
-    user: ['ban']
+    ...defaultStatements,
+    manager: [
+        'create',
+        'list',
+        'set-role',
+        'ban',
+        'impersonate',
+        'delete',
+        'set-password'
+    ], // <-- Permissions available for created roles
+    user: ['set-password']
 } as const
 
 export const ac = createAccessControl(statement)
 
 export const user = ac.newRole({
-    leads: ['view', 'update']
+    user: ['set-password']
 })
 
 export const admin = ac.newRole({
-    leads: ['create', 'update', 'delete', 'view']
+    manager: [
+        'create',
+        'list',
+        'set-role',
+        'ban',
+        'impersonate',
+        'delete',
+        'set-password'
+    ]
+    // ...adminAc.statements
 })
 
 export const agent = ac.newRole({
-    leads: ['create', 'update', 'delete'],
-    user: ['ban']
+    manager: ['create', 'list', 'ban', 'impersonate'],
+    user: ['set-password']
 })

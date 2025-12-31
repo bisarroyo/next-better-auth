@@ -81,6 +81,13 @@ export function Header() {
                                             Ajustes
                                         </Link>
                                     </DropdownMenuItem>
+                                    {session?.user.role === 'admin' && (
+                                        <DropdownMenuItem>
+                                            <Link href={'/admin'}>
+                                                Admin Panel
+                                            </Link>
+                                        </DropdownMenuItem>
+                                    )}
                                 </DropdownMenuGroup>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem
