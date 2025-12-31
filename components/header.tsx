@@ -2,7 +2,7 @@
 import { ModeToggle } from '@/components/ui/mode-toggle'
 import { authClient } from '@/lib/auth-client'
 
-import { useSession } from '@/hooks/useSession'
+import { useSession } from '@/hooks/use-session'
 
 import {
     DropdownMenu,
