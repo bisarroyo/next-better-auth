@@ -24,7 +24,6 @@ export default async function DashboardPage() {
             throw redirect('/signin')
         })
 
-    console.log(activeSessions)
     return (
         <div className='w-full flex items-center justify-center'>
             <div className='flex gap-4 flex-col max-w-7xl w-full mx-auto mt-4'>

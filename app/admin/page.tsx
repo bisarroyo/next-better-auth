@@ -2,17 +2,9 @@
 
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { format } from 'date-fns'
-import {
-    Calendar as CalendarIcon,
-    Loader2,
-    Plus,
-    RefreshCw,
-    Trash,
-    UserCircle
-} from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { Calendar as CalendarIcon, Loader2 } from 'lucide-react'
 import { useState } from 'react'
-import { Toaster, toast } from 'sonner'
+import { toast } from 'sonner'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
@@ -21,8 +13,7 @@ import {
     Dialog,
     DialogContent,
     DialogHeader,
-    DialogTitle,
-    DialogTrigger
+    DialogTitle
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -31,13 +22,7 @@ import {
     PopoverContent,
     PopoverTrigger
 } from '@/components/ui/popover'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from '@/components/ui/select'
+
 import {
     Table,
     TableBody,
@@ -48,17 +33,14 @@ import {
 } from '@/components/ui/table'
 import { authClient } from '@/lib/auth-client'
 import { cn } from '@/lib/utils'
+import CreateUser from './_components/create-user'
+import DeleteUser from './_components/delete-user'
+import RevokeSession from './_components/revoke-sessions'
+import ImpersonateUser from './_components/impersonate-user'
 
 export default function Page() {
     const queryClient = useQueryClient()
-    const router = useRouter()
-    const [isDialogOpen, setIsDialogOpen] = useState(false)
-    const [newUser, setNewUser] = useState({
-        email: '',
-        password: '',
-        name: '',
-        role: 'user' as const
-    })
+
     const [isLoading, setIsLoading] = useState<string | undefined>()
     const [isBanDialogOpen, setIsBanDialogOpen] = useState(false)
     const [banForm, setBanForm] = useState({
@@ -85,81 +67,6 @@ export default function Page() {
             return data?.users || []
         }
     })
-
-    const handleCreateUser = async (e: React.FormEvent) => {
-        e.preventDefault()
-        setIsLoading('create')
-        try {
-            await authClient.admin.createUser({
-                email: newUser.email,
-                password: newUser.password,
-                name: newUser.name,
-                role: newUser.role
-            })
-            toast.success('User created successfully')
-            setNewUser({ email: '', password: '', name: '', role: 'user' })
-            setIsDialogOpen(false)
-            queryClient.invalidateQueries({
-                queryKey: ['users']
-            })
-        } catch (error: Error | unknown) {
-            toast.error(
-                error instanceof Error ? error.message : 'Failed to create user'
-            )
-        } finally {
-            setIsLoading(undefined)
-        }
-    }
-
-    const handleDeleteUser = async (id: string) => {
-        setIsLoading(`delete-${id}`)
-        try {
-            await authClient.admin.removeUser({ userId: id })
-            toast.success('User deleted successfully')
-            queryClient.invalidateQueries({
-                queryKey: ['users']
-            })
-        } catch (error: Error | unknown) {
-            toast.error(
-                error instanceof Error ? error.message : 'Failed to delete user'
-            )
-        } finally {
-            setIsLoading(undefined)
-        }
-    }
-
-    const handleRevokeSessions = async (id: string) => {
-        setIsLoading(`revoke-${id}`)
-        try {
-            await authClient.admin.revokeUserSessions({ userId: id })
-            toast.success('Sessions revoked for user')
-        } catch (error: Error | unknown) {
-            toast.error(
-                error instanceof Error
-                    ? error.message
-                    : 'Failed to revoke sessions'
-            )
-        } finally {
-            setIsLoading(undefined)
-        }
-    }
-
-    const handleImpersonateUser = async (id: string) => {
-        setIsLoading(`impersonate-${id}`)
-        try {
-            await authClient.admin.impersonateUser({ userId: id })
-            toast.success('Impersonated user')
-            router.push('/dashboard')
-        } catch (error: Error | unknown) {
-            toast.error(
-                error instanceof Error
-                    ? error.message
-                    : 'Failed to impersonate user'
-            )
-        } finally {
-            setIsLoading(undefined)
-        }
-    }
 
     const handleBanUser = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -189,108 +96,10 @@ export default function Page() {
 
     return (
         <div className='container mx-auto p-4 space-y-8 max-w-7xl'>
-            <Toaster richColors />
             <Card>
                 <CardHeader className='flex flex-row items-center justify-between'>
                     <CardTitle className='text-2xl'>Admin Dashboard</CardTitle>
-                    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                        <DialogTrigger asChild>
-                            <Button>
-                                <Plus className='mr-2 h-4 w-4' /> Create User
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                            <DialogHeader>
-                                <DialogTitle>Create New User</DialogTitle>
-                            </DialogHeader>
-                            <form
-                                onSubmit={handleCreateUser}
-                                className='space-y-4'>
-                                <div>
-                                    <Label htmlFor='email'>Email</Label>
-                                    <Input
-                                        id='email'
-                                        type='email'
-                                        value={newUser.email}
-                                        onChange={(e) =>
-                                            setNewUser({
-                                                ...newUser,
-                                                email: e.target.value
-                                            })
-                                        }
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <Label htmlFor='password'>Password</Label>
-                                    <Input
-                                        id='password'
-                                        type='password'
-                                        value={newUser.password}
-                                        onChange={(e) =>
-                                            setNewUser({
-                                                ...newUser,
-                                                password: e.target.value
-                                            })
-                                        }
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <Label htmlFor='name'>Name</Label>
-                                    <Input
-                                        id='name'
-                                        value={newUser.name}
-                                        onChange={(e) =>
-                                            setNewUser({
-                                                ...newUser,
-                                                name: e.target.value
-                                            })
-                                        }
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <Label htmlFor='role'>Role</Label>
-                                    <Select
-                                        value={newUser.role}
-                                        onValueChange={(
-                                            value: 'admin' | 'user'
-                                        ) =>
-                                            setNewUser({
-                                                ...newUser,
-                                                role: value as 'user'
-                                            })
-                                        }>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder='Select role' />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value='admin'>
-                                                Admin
-                                            </SelectItem>
-                                            <SelectItem value='user'>
-                                                User
-                                            </SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <Button
-                                    type='submit'
-                                    className='w-full'
-                                    disabled={isLoading === 'create'}>
-                                    {isLoading === 'create' ? (
-                                        <>
-                                            <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-                                            Creating...
-                                        </>
-                                    ) : (
-                                        'Create User'
-                                    )}
-                                </Button>
-                            </form>
-                        </DialogContent>
-                    </Dialog>
+                    <CreateUser />
                     <Dialog
                         open={isBanDialogOpen}
                         onOpenChange={setIsBanDialogOpen}>
@@ -413,63 +222,13 @@ export default function Page() {
                                         </TableCell>
                                         <TableCell>
                                             <div className='flex space-x-2'>
-                                                <Button
-                                                    variant='destructive'
-                                                    size='sm'
-                                                    onClick={() =>
-                                                        handleDeleteUser(
-                                                            user.id
-                                                        )
-                                                    }
-                                                    disabled={isLoading?.startsWith(
-                                                        'delete'
-                                                    )}>
-                                                    {isLoading ===
-                                                    `delete-${user.id}` ? (
-                                                        <Loader2 className='h-4 w-4 animate-spin' />
-                                                    ) : (
-                                                        <Trash className='h-4 w-4' />
-                                                    )}
-                                                </Button>
-                                                <Button
-                                                    variant='outline'
-                                                    size='sm'
-                                                    onClick={() =>
-                                                        handleRevokeSessions(
-                                                            user.id
-                                                        )
-                                                    }
-                                                    disabled={isLoading?.startsWith(
-                                                        'revoke'
-                                                    )}>
-                                                    {isLoading ===
-                                                    `revoke-${user.id}` ? (
-                                                        <Loader2 className='h-4 w-4 animate-spin' />
-                                                    ) : (
-                                                        <RefreshCw className='h-4 w-4' />
-                                                    )}
-                                                </Button>
-                                                <Button
-                                                    variant='secondary'
-                                                    size='sm'
-                                                    onClick={() =>
-                                                        handleImpersonateUser(
-                                                            user.id
-                                                        )
-                                                    }
-                                                    disabled={isLoading?.startsWith(
-                                                        'impersonate'
-                                                    )}>
-                                                    {isLoading ===
-                                                    `impersonate-${user.id}` ? (
-                                                        <Loader2 className='h-4 w-4 animate-spin' />
-                                                    ) : (
-                                                        <>
-                                                            <UserCircle className='h-4 w-4 mr-2' />
-                                                            Impersonate
-                                                        </>
-                                                    )}
-                                                </Button>
+                                                <DeleteUser userId={user.id} />
+                                                <RevokeSession
+                                                    userId={user.id}
+                                                />
+                                                <ImpersonateUser
+                                                    userId={user.id}
+                                                />
                                                 <Button
                                                     variant='outline'
                                                     size='sm'

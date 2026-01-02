@@ -73,20 +73,22 @@ export function Header() {
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuGroup>
-                                    <DropdownMenuItem>
-                                        <Link href={'/account'}>Perfil</Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem>
-                                        <Link href={'/account/settings'}>
-                                            Ajustes
-                                        </Link>
-                                    </DropdownMenuItem>
-                                    {session?.user.role === 'admin' && (
+                                    <Link href={'/account'}>
                                         <DropdownMenuItem>
-                                            <Link href={'/admin'}>
-                                                Admin Panel
-                                            </Link>
+                                            Perfil
                                         </DropdownMenuItem>
+                                    </Link>
+                                    <Link href={'/account/settings'}>
+                                        <DropdownMenuItem>
+                                            Ajustes
+                                        </DropdownMenuItem>
+                                    </Link>
+                                    {session?.user.role === 'admin' && (
+                                        <Link href={'/admin'}>
+                                            <DropdownMenuItem>
+                                                Admin Panel
+                                            </DropdownMenuItem>
+                                        </Link>
                                     )}
                                 </DropdownMenuGroup>
                                 <DropdownMenuSeparator />

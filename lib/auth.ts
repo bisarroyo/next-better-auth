@@ -26,7 +26,7 @@ const from = process.env.BETTER_AUTH_EMAIL || 'delivered@resend.dev'
 const to = process.env.TEST_EMAIL || ''
 
 export const auth = betterAuth({
-    appName: 'tauro-crm',
+    appName: 'better-auth',
     database: drizzleAdapter(db, {
         provider: 'sqlite', // or "pg" or "mysql"
         schema: authSchema
@@ -103,7 +103,7 @@ export const auth = betterAuth({
     },
     account: {
         accountLinking: {
-            trustedProviders: ['google', 'tauro-crm']
+            trustedProviders: ['google', 'better-auth']
         }
     },
     socialProviders: {
